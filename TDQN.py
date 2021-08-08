@@ -483,7 +483,7 @@ class TDQN:
         """
 
         # Check if an update is required (update frequency)
-        if (self.iterations % targetNetworkUpdate == 0):
+        if self.iterations % targetNetworkUpdate == 0:
             # Transfer the DNN parameters (policy network -> target network)
             self.targetNetwork.load_state_dict(self.policyNetwork.state_dict())
 
@@ -526,9 +526,9 @@ class TDQN:
         """
 
         # EXPLOITATION -> RL policy
-        if (random.random() > self.epsilonValue(self.iterations)):
+        if random.random() > self.epsilonValue(self.iterations):
             # Sticky action (RL generalization mechanism)
-            if (random.random() > alpha):
+            if random.random() > alpha:
                 action, Q, QValues = self.chooseAction(state)
             else:
                 action = previousAction
@@ -557,7 +557,7 @@ class TDQN:
         """
 
         # Check that the replay memory is filled enough
-        if (len(self.replayMemory) >= batchSize):
+        if len(self.replayMemory) >= batchSize:
             # Set the Deep Neural Network in training mode
             self.policyNetwork.train()
 
@@ -648,7 +648,7 @@ class TDQN:
                 print("Training progression (hardware selected => " + str(self.device) + "):")
 
             # Training phase for the number of episodes specified as parameter
-            for episode in tqdm(range(trainingParameters[0]), disable=not (verbose)):
+            for episode in tqdm(range(trainingParameters[0]), disable=not verbose):
 
                 # For each episode, train on the entire set of training environments
                 for i in range(len(trainingEnvList)):

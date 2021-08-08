@@ -415,7 +415,7 @@ class MovingAveragesTF(tradingStrategy):
         longAverage = np.mean(state[-self.parameters[1]:])
 
         # Comparison of the two moving averages
-        if (shortAverage >= longAverage):
+        if shortAverage >= longAverage:
             # Long position
             return 1
         else:
@@ -470,10 +470,10 @@ class MovingAveragesTF(tradingStrategy):
             for longer in range(bounds[0], bounds[1], step):
 
                 # Obvious restriction on the parameters
-                if (shorter < longer):
+                if shorter < longer:
 
                     # If required, print the progression of the training
-                    if (verbose):
+                    if verbose:
                         print("".join(["Training progression: ", str(count), "/", str(length)]), end='\r', flush=True)
 
                     # Apply the trading strategy with the current combination of parameters
@@ -488,7 +488,7 @@ class MovingAveragesTF(tradingStrategy):
                     results[i][j] = performance
 
                     # Track the best performance and parameters
-                    if (performance > bestPerformance):
+                    if performance > bestPerformance:
                         bestShort = shorter
                         bestLong = longer
                         bestPerformance = performance
@@ -682,7 +682,7 @@ class MovingAveragesMR(tradingStrategy):
         longAverage = np.mean(state[-self.parameters[1]:])
 
         # Comparison of the two moving averages
-        if (shortAverage <= longAverage):
+        if shortAverage <= longAverage:
             # Long position
             return 1
         else:
@@ -737,10 +737,10 @@ class MovingAveragesMR(tradingStrategy):
             for longer in range(bounds[0], bounds[1], step):
 
                 # Obvious restriction on the parameters
-                if (shorter < longer):
+                if shorter < longer:
 
                     # If required, print the progression of the training
-                    if (verbose):
+                    if verbose:
                         print("".join(["Training progression: ", str(count), "/", str(length)]), end='\r', flush=True)
 
                     # Apply the trading strategy with the current combination of parameters
@@ -755,7 +755,7 @@ class MovingAveragesMR(tradingStrategy):
                     results[i][j] = performance
 
                     # Track the best performance and parameters
-                    if (performance > bestPerformance):
+                    if performance > bestPerformance:
                         bestShort = shorter
                         bestLong = longer
                         bestPerformance = performance

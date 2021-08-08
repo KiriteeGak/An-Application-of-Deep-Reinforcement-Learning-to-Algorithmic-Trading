@@ -83,13 +83,13 @@ class TradingEnv(gym.Env):
         """
 
         # CASE 1: Fictive stock generation
-        if (marketSymbol in fictiveStocks):
+        if marketSymbol in fictiveStocks:
             stockGeneration = StockGenerator()
-            if (marketSymbol == 'LINEARUP'):
+            if marketSymbol == 'LINEARUP':
                 self.data = stockGeneration.linearUp(startingDate, endingDate)
-            elif (marketSymbol == 'LINEARDOWN'):
+            elif marketSymbol == 'LINEARDOWN':
                 self.data = stockGeneration.linearDown(startingDate, endingDate)
-            elif (marketSymbol == 'SINUSOIDAL'):
+            elif marketSymbol == 'SINUSOIDAL':
                 self.data = stockGeneration.sinusoidal(startingDate, endingDate)
             else:
                 self.data = stockGeneration.triangle(startingDate, endingDate)
@@ -102,7 +102,7 @@ class TradingEnv(gym.Env):
             exists = os.path.isfile(csvName + '.csv')
 
             # If affirmative, load the stock market data from the database
-            if (exists):
+            if exists:
                 self.data = csvConverter.CSVToDataframe(csvName)
             # Otherwise, download the stock market data from Yahoo Finance and save it in the database
             else:
@@ -202,7 +202,7 @@ class TradingEnv(gym.Env):
         deltaValues = - cash - numberOfShares * price * (1 + self.epsilon) * (1 + self.transactionCosts)
         if deltaValues < 0:
             lowerBound = deltaValues / (
-                        price * (2 * self.transactionCosts + (self.epsilon * (1 + self.transactionCosts))))
+                    price * (2 * self.transactionCosts + (self.epsilon * (1 + self.transactionCosts))))
         else:
             lowerBound = deltaValues / (price * self.epsilon * (1 + self.transactionCosts))
         return lowerBound
@@ -226,36 +226,36 @@ class TradingEnv(gym.Env):
         customReward = False
 
         # CASE 1: LONG POSITION
-        if (action == 1):
+        if action == 1:
             self.data['Position'][t] = 1
             # Case a: Long -> Long
-            if (self.data['Position'][t - 1] == 1):
+            if self.data['Position'][t - 1] == 1:
                 self.data['Cash'][t] = self.data['Cash'][t - 1]
                 self.data['Holdings'][t] = self.numberOfShares * self.data['Close'][t]
             # Case b: No position -> Long
-            elif (self.data['Position'][t - 1] == 0):
+            elif self.data['Position'][t - 1] == 0:
                 self.numberOfShares = math.floor(
                     self.data['Cash'][t - 1] / (self.data['Close'][t] * (1 + self.transactionCosts)))
                 self.data['Cash'][t] = self.data['Cash'][t - 1] - self.numberOfShares * self.data['Close'][t] * (
-                            1 + self.transactionCosts)
+                        1 + self.transactionCosts)
                 self.data['Holdings'][t] = self.numberOfShares * self.data['Close'][t]
                 self.data['Action'][t] = 1
             # Case c: Short -> Long
             else:
                 self.data['Cash'][t] = self.data['Cash'][t - 1] - self.numberOfShares * self.data['Close'][t] * (
-                            1 + self.transactionCosts)
+                        1 + self.transactionCosts)
                 self.numberOfShares = math.floor(
                     self.data['Cash'][t] / (self.data['Close'][t] * (1 + self.transactionCosts)))
                 self.data['Cash'][t] = self.data['Cash'][t] - self.numberOfShares * self.data['Close'][t] * (
-                            1 + self.transactionCosts)
+                        1 + self.transactionCosts)
                 self.data['Holdings'][t] = self.numberOfShares * self.data['Close'][t]
                 self.data['Action'][t] = 1
 
         # CASE 2: SHORT POSITION
-        elif (action == 0):
+        elif action == 0:
             self.data['Position'][t] = -1
             # Case a: Short -> Short
-            if (self.data['Position'][t - 1] == -1):
+            if self.data['Position'][t - 1] == -1:
                 lowerBound = self.computeLowerBound(self.data['Cash'][t - 1], -numberOfShares,
                                                     self.data['Close'][t - 1])
                 if lowerBound <= 0:
@@ -265,25 +265,25 @@ class TradingEnv(gym.Env):
                     numberOfSharesToBuy = min(math.floor(lowerBound), self.numberOfShares)
                     self.numberOfShares -= numberOfSharesToBuy
                     self.data['Cash'][t] = self.data['Cash'][t - 1] - numberOfSharesToBuy * self.data['Close'][t] * (
-                                1 + self.transactionCosts)
+                            1 + self.transactionCosts)
                     self.data['Holdings'][t] = - self.numberOfShares * self.data['Close'][t]
                     customReward = True
             # Case b: No position -> Short
-            elif (self.data['Position'][t - 1] == 0):
+            elif self.data['Position'][t - 1] == 0:
                 self.numberOfShares = math.floor(
                     self.data['Cash'][t - 1] / (self.data['Close'][t] * (1 + self.transactionCosts)))
                 self.data['Cash'][t] = self.data['Cash'][t - 1] + self.numberOfShares * self.data['Close'][t] * (
-                            1 - self.transactionCosts)
+                        1 - self.transactionCosts)
                 self.data['Holdings'][t] = - self.numberOfShares * self.data['Close'][t]
                 self.data['Action'][t] = -1
             # Case c: Long -> Short
             else:
                 self.data['Cash'][t] = self.data['Cash'][t - 1] + self.numberOfShares * self.data['Close'][t] * (
-                            1 - self.transactionCosts)
+                        1 - self.transactionCosts)
                 self.numberOfShares = math.floor(
                     self.data['Cash'][t] / (self.data['Close'][t] * (1 + self.transactionCosts)))
                 self.data['Cash'][t] = self.data['Cash'][t] + self.numberOfShares * self.data['Close'][t] * (
-                            1 - self.transactionCosts)
+                        1 - self.transactionCosts)
                 self.data['Holdings'][t] = - self.numberOfShares * self.data['Close'][t]
                 self.data['Action'][t] = -1
 
@@ -308,32 +308,32 @@ class TradingEnv(gym.Env):
                       self.data['High'][self.t - self.stateLength: self.t].tolist(),
                       self.data['Volume'][self.t - self.stateLength: self.t].tolist(),
                       [self.data['Position'][self.t - 1]]]
-        if (self.t == self.data.shape[0]):
+        if self.t == self.data.shape[0]:
             self.done = 1
 
             # Same reasoning with the other action (exploration trick)
         otherAction = int(not bool(action))
         customReward = False
-        if (otherAction == 1):
+        if otherAction == 1:
             otherPosition = 1
-            if (self.data['Position'][t - 1] == 1):
+            if self.data['Position'][t - 1] == 1:
                 otherCash = self.data['Cash'][t - 1]
                 otherHoldings = numberOfShares * self.data['Close'][t]
-            elif (self.data['Position'][t - 1] == 0):
+            elif self.data['Position'][t - 1] == 0:
                 numberOfShares = math.floor(
                     self.data['Cash'][t - 1] / (self.data['Close'][t] * (1 + self.transactionCosts)))
                 otherCash = self.data['Cash'][t - 1] - numberOfShares * self.data['Close'][t] * (
-                            1 + self.transactionCosts)
+                        1 + self.transactionCosts)
                 otherHoldings = numberOfShares * self.data['Close'][t]
             else:
                 otherCash = self.data['Cash'][t - 1] - numberOfShares * self.data['Close'][t] * (
-                            1 + self.transactionCosts)
+                        1 + self.transactionCosts)
                 numberOfShares = math.floor(otherCash / (self.data['Close'][t] * (1 + self.transactionCosts)))
                 otherCash = otherCash - numberOfShares * self.data['Close'][t] * (1 + self.transactionCosts)
                 otherHoldings = numberOfShares * self.data['Close'][t]
         else:
             otherPosition = -1
-            if (self.data['Position'][t - 1] == -1):
+            if self.data['Position'][t - 1] == -1:
                 lowerBound = self.computeLowerBound(self.data['Cash'][t - 1], -numberOfShares,
                                                     self.data['Close'][t - 1])
                 if lowerBound <= 0:
@@ -343,18 +343,18 @@ class TradingEnv(gym.Env):
                     numberOfSharesToBuy = min(math.floor(lowerBound), numberOfShares)
                     numberOfShares -= numberOfSharesToBuy
                     otherCash = self.data['Cash'][t - 1] - numberOfSharesToBuy * self.data['Close'][t] * (
-                                1 + self.transactionCosts)
+                            1 + self.transactionCosts)
                     otherHoldings = - numberOfShares * self.data['Close'][t]
                     customReward = True
-            elif (self.data['Position'][t - 1] == 0):
+            elif self.data['Position'][t - 1] == 0:
                 numberOfShares = math.floor(
                     self.data['Cash'][t - 1] / (self.data['Close'][t] * (1 + self.transactionCosts)))
                 otherCash = self.data['Cash'][t - 1] + numberOfShares * self.data['Close'][t] * (
-                            1 - self.transactionCosts)
+                        1 - self.transactionCosts)
                 otherHoldings = - numberOfShares * self.data['Close'][t]
             else:
                 otherCash = self.data['Cash'][t - 1] + numberOfShares * self.data['Close'][t] * (
-                            1 - self.transactionCosts)
+                        1 - self.transactionCosts)
                 numberOfShares = math.floor(otherCash / (self.data['Close'][t] * (1 + self.transactionCosts)))
                 otherCash = otherCash + numberOfShares * self.data['Close'][t] * (1 - self.transactionCosts)
                 otherHoldings = - self.numberOfShares * self.data['Close'][t]
@@ -433,5 +433,5 @@ class TradingEnv(gym.Env):
                       self.data['High'][self.t - self.stateLength: self.t].tolist(),
                       self.data['Volume'][self.t - self.stateLength: self.t].tolist(),
                       [self.data['Position'][self.t - 1]]]
-        if (self.t == self.data.shape[0]):
+        if self.t == self.data.shape[0]:
             self.done = 1

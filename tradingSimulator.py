@@ -161,7 +161,7 @@ class TradingSimulator:
           
     METHODS:   - displayTestbench: Display consecutively all the stocks
                                    included in the testbench.
-               - analyseTimeSeries: Perform a detailled analysis of the stock
+               - analyseTimeSeries: Perform a detailed analysis of the stock
                                     market price time series.
                - plotEntireTrading: Plot the entire trading activity, with both
                                     the training and testing phases rendered on
@@ -330,7 +330,7 @@ class TradingSimulator:
                 - stockName: Name of the stock (in the testbench).
                 - startingDate: Beginning of the trading horizon.
                 - endingDate: Ending of the trading horizon.
-                - splitingDate: Spliting date between the training dataset
+                - splitingDate: Splitting date between the training dataset
                                 and the testing dataset.
                 - observationSpace: Size of the RL observation space.
                 - actionSpace: Size of the RL action space.

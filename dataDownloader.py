@@ -77,7 +77,7 @@ class AlphaVantage:
 
         # Process the dataframe to homogenize the output format
         self.data = self.processDataframe(data)
-        if (startingDate != 0 and endingDate != 0):
+        if startingDate != 0 and endingDate != 0:
             self.data = self.data.loc[startingDate:endingDate]
 
         return self.data
@@ -110,7 +110,7 @@ class AlphaVantage:
 
         # Process the dataframe to homogenize the output format
         self.data = self.processDataframe(data)
-        if (startingDate != 0 and endingDate != 0):
+        if startingDate != 0 and endingDate != 0:
             self.data = self.data.loc[startingDate:endingDate]
 
         return self.data

@@ -95,7 +95,7 @@ class PerformanceEstimator:
         timeElapsed = timeElapsed.days
 
         # Compute the Annualized Return
-        if (cumulativeReturn > -1):
+        if cumulativeReturn > -1:
             self.annualizedReturn = 100 * (((1 + cumulativeReturn) ** (365 / timeElapsed)) - 1)
         else:
             self.annualizedReturn = -100
@@ -228,10 +228,10 @@ class PerformanceEstimator:
 
         # Monitor the success of each trade over the entire trading horizon
         for i in range(index + 1, len(self.data.index)):
-            if (self.data['Action'][i] != 0):
+            if self.data['Action'][i] != 0:
                 delta = self.data['Money'][i] - money
                 money = self.data['Money'][i]
-                if (delta >= 0):
+                if delta >= 0:
                     good += 1
                     profit += delta
                 else:
@@ -240,7 +240,7 @@ class PerformanceEstimator:
 
         # Special case of the termination trade
         delta = self.data['Money'][-1] - money
-        if (delta >= 0):
+        if delta >= 0:
             good += 1
             profit += delta
         else:
@@ -251,11 +251,11 @@ class PerformanceEstimator:
         self.profitability = 100 * good / (good + bad)
 
         # Compute the ratio average Profit/Loss  
-        if (good != 0):
+        if good != 0:
             profit /= good
-        if (bad != 0):
+        if bad != 0:
             loss /= bad
-        if (loss != 0):
+        if loss != 0:
             self.averageProfitLossRatio = profit / loss
         else:
             self.averageProfitLossRatio = float('Inf')
